@@ -4,11 +4,28 @@ import "./styles.css";
 import { OrderItem } from "../../OrderItem";
 import { Button } from "../../Button";
 
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useHistory } from 'react-router-dom';
+
 export const ShoppingCartPage = () => {
 
 const [order, setOrder] = useState([]);
 
+const history = useHistory();
+
 const globalState = useContext(PetsOrderContext);
+
+  //check if a current user is logged into the firebase
+  useEffect(
+    () => {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          history.push('/login');
+        }
+      })
+    }, []
+  );
 
 useEffect(
   () => {

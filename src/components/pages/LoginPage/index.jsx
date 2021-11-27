@@ -1,6 +1,9 @@
 import "./styles.css"
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useHistory } from 'react-router-dom';
+
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
 
 export const LoginPage = () => {
 
@@ -8,12 +11,33 @@ export const LoginPage = () => {
 
     const {register, handleSubmit } = useForm();
 
-    const loginUser = (formVals) => {
-        console.log("Login Submitted", formVals)
+    const history = useHistory();
+
+    const loginUser = async(formVals) => {
+        
+        try {
+            console.log("Login Submitted", formVals)
+            const auth = getAuth();
+            console.log("before", auth);
+            const loginUser = await signInWithEmailAndPassword(auth, formVals.user, formVals.password);
+            console.log("after login", auth);
+        } catch (error) {
+            console.log ("Error connecting to firebase", error)
+        }
     }
 
-    const signUpUser = (formVals) => {
+    const signUpUser = async(formVals) => {
         console.log("Sign Up Submitted", formVals)
+        const auth = getAuth();
+
+        try {
+            const signUpUser = await createUserWithEmailAndPassword(auth, formVals.user, formVals.password);
+            console.log("New user was created", signUpUser);
+            history.push('/');
+        } catch (error){
+            //handle incorrect password at here
+            console.log("Error from firebase", error)
+        }
     }
 
     return (
@@ -46,13 +70,13 @@ export const LoginPage = () => {
                         <br />
 
                         <label htmlFor="user">Email</label>
-                        <input type="email" name="user" required />
+                        <input type="email" name="user" required {...register('user')}/>
 
                         <label htmlFor="password">Password</label>
-                        <input type="password" name="password" required />
+                        <input type="password" name="password" required {...register('password')}/>
 
                         <label htmlFor="passwordConfirm">Confirm password</label>
-                        <input type="password" name="passwordConfirm" required />
+                        <input type="password" name="passwordConfirm" required {...register('password')}/>
 
                         <input type="submit" value="Sign Up" />
                         <br />
