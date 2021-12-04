@@ -21,6 +21,7 @@ export const PetsHomePage = () => {
   //check if a current user is logged into the firebase
   useEffect(
     () => {
+      getPets();
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
         if (!user) {
@@ -70,14 +71,14 @@ export const PetsHomePage = () => {
         return item.fields
       });
 
-      console.log (formattedData);
+      console.log(formattedData);
       setPets(formattedData);
       setFilteredPets(formattedData);
       globalState.initializePets(formattedData);
       setLoading(false);
 
     } catch(err) {
-      console.log (err);
+      console.log(err);
       setLoading(false);
     }
   }

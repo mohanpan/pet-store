@@ -16,11 +16,13 @@ export const LoginPage = () => {
     const loginUser = async(formVals) => {
         
         try {
-            console.log("Login Submitted", formVals)
+            console.log("Login Submitted", formVals);
             const auth = getAuth();
             console.log("before", auth);
             const loginUser = await signInWithEmailAndPassword(auth, formVals.user, formVals.password);
             console.log("after login", auth);
+            history.push('/');
+            console.log(auth, loginUser);
         } catch (error) {
             console.log ("Error connecting to firebase", error)
         }

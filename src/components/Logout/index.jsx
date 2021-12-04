@@ -1,4 +1,4 @@
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
 import { useEffect, useState } from 'react';
 
 export const Logout = () => {
@@ -21,7 +21,7 @@ export const Logout = () => {
     const logoutUser = async() => {
         const auth = getAuth();
         try {
-            await Logout(auth);
+            await signOut(auth);
         } catch (error) {
             console.log(error)
         }
